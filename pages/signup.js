@@ -2,6 +2,8 @@ import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import { useState } from "react";
+import { login } from '../utils/auth';
+import { useRouter } from "next/router";
 
 export default function Home() {
 
@@ -9,11 +11,13 @@ export default function Home() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const [error, setError] = useState('');
+
+  const router = useRouter();
+
   const handleSubmit = async (e) => {
 
     e.preventDefault();
-
-    
 
     try {
       const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + 'auth/signup', {
@@ -25,10 +29,23 @@ export default function Home() {
       });
 
       if (response.ok) {
-        // Signup successful
         console.log('Signup successful');
+        const responseData = await response.json();
+        // console.log('Response data:', responseData);
+        if(responseData && responseData.data){
+          login(responseData.data.token)
+          router.push('/payment');
+        }else{
+          setError('Error happend. Please contact Admin')
+        }
+        
       } else {
         console.log('Signup failed');
+        const responseData = await response.json();
+        // console.log(responseData.error)
+        if(responseData && responseData.error){
+          setError(responseData.error)
+        }
       }
     } catch (error) {
       console.log(error)
@@ -82,7 +99,9 @@ export default function Home() {
                   <h2 className="card-title text-center text-uppercase fw-bold">
                     Sign Up
                   </h2>
-
+                  <div className="text-danger mb-2">
+                    {error}
+                  </div>
                   <div className="mb-3">
                     <label
                       htmlFor="exampleFormControlInput1"

@@ -30,7 +30,7 @@ export default function Payment() {
           </div>
         </header>
         <div className="row">
-          <h1 className="text-center text-primary text-uppercase">
+          <h1 className="text-center text-primary text-uppercase fw-bold mb-5">
             Enter Your Payment Details Below
           </h1>
         </div>

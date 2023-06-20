@@ -3,14 +3,14 @@ import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import { signIn } from "next-auth/react"
 import { useState } from "react";
-
+import { useRouter } from "next/router";
 
 
 export default function Home({ providers }) {
 
-  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const router = useRouter();
 
   const handleSignIn = async () => {
     await signIn('google');
@@ -20,18 +20,17 @@ export default function Home({ providers }) {
     e.preventDefault();
 
     // Call the login API with username and password
-    const response = await fetch('/api/login', {
+    const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + 'auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ email, password }),
     });
 
     if (response.ok) {
-      // Redirect to the dashboard or perform other actions
-      // e.g., set authentication state, save token, etc.
       console.log('Login successful');
+      router.push('/payment');
     } else {
       console.log('Login failed');
     }
@@ -93,90 +92,94 @@ export default function Home({ providers }) {
               className="card shadow p-3 mb-5 rounded"
               style={{ maxWidth: 730, backgroundColor: "#FFF" }}
             >
-              <div className="card-body">
-                <h2 className="card-title text-center text-uppercase fw-bold">
-                  Sign In
-                </h2>
+              <form onSubmit={handleSubmit}>
+                <div className="card-body">
+                  <h2 className="card-title text-center text-uppercase fw-bold">
+                    Sign In
+                  </h2>
 
-                <div className="mb-3">
-                  <label
-                    htmlFor="exampleFormControlInput1"
-                    className="form-label fw-bold"
+                  <div className="mb-3">
+                    <label
+                      htmlFor="exampleFormControlInput1"
+                      className="form-label fw-bold"
+                    >
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      className="form-control"
+                      id="exampleFormControlInput1"
+                      placeholder="Enter your email"
+                      width="100%"
+                      height="85%"
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <label
+                      htmlFor="exampleFormControlInput1"
+                      className="form-label fw-bold"
+                    >
+                      Password
+                    </label>
+                    <input
+                      type="password"
+                      className="form-control"
+                      id="exampleFormControlInput1"
+                      placeholder="Enter your email password"
+                      width="100%"
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="btn btn-primary text-uppercase w-100 mb-4 mt-3 fw-bold"
                   >
-                    Name
-                  </label>
-                  <input
-                    type="name"
-                    className="form-control"
-                    id="exampleFormControlInput1"
-                    placeholder="Enter your username"
-                    width="100%"
-                    height="85%"
-                  />
-                </div>
+                    Sign in with Email
+                  </button>
 
-                <div className="mb-3">
-                  <label
-                    htmlFor="exampleFormControlInput1"
-                    className="form-label fw-bold"
+
+                  <button
+                    type="button"
+                    className="btn btn-outline-dark w-100 mb-4 fw-bold"
+                    width="100%"
+                    onClick={handleSignIn}
                   >
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    id="exampleFormControlInput1"
-                    placeholder="Enter your email address"
+                    <span>
+                      <img
+                        className="img-thumbnail bg-transparent border-0"
+                        src="/Google logo.svg"
+                      ></img>
+                    </span>
+                    Sign in with Google
+                  </button>
+
+
+                  <button
+                    type="button"
+                    className="btn btn-outline-dark w-100 mb-4 fw-bold"
                     width="100%"
-                  />
+                  >
+                    <span>
+                      <img
+                        className="img-thumbnail bg-transparent border-0"
+                        src="/fb-logo.svg"
+                      ></img>
+                    </span>
+                    Sign in with Facebook
+                  </button>
+
+
+                  <div className="mb-3">
+                    <p className="text-center">
+                      By continuing your agree to our privacy policy and terms and
+                      conditions.
+                    </p>
+                  </div>
                 </div>
-
-                <button
-                  type="button"
-                  className="btn btn-primary text-uppercase w-100 mb-4 mt-3 fw-bold"
-                >
-                  Sign in with Email
-                </button>
-
-
-                <button
-                  type="button"
-                  className="btn btn-outline-dark w-100 mb-4 fw-bold"
-                  width="100%"
-                  onClick={handleSignIn}
-                >
-                  <span>
-                    <img
-                      className="img-thumbnail bg-transparent border-0"
-                      src="/Google logo.svg"
-                    ></img>
-                  </span>
-                  Sign in with Google
-                </button>
-
-
-                <button
-                  type="button"
-                  className="btn btn-outline-dark w-100 mb-4 fw-bold"
-                  width="100%"
-                >
-                  <span>
-                    <img
-                      className="img-thumbnail bg-transparent border-0"
-                      src="/fb-logo.svg"
-                    ></img>
-                  </span>
-                  Sign in with Facebook
-                </button>
-
-
-                <div className="mb-3">
-                  <p className="text-center">
-                    By continuing your agree to our privacy policy and terms and
-                    conditions.
-                  </p>
-                </div>
-              </div>
+              </form>
             </div>
           </div>
         </div>
