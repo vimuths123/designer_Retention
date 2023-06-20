@@ -22,7 +22,7 @@ export default function Payment() {
                     alt="Logo"
                     width="72%"
                     height="auto"
-                    class="d-inline-block align-text-top"
+                    className="d-inline-block align-text-top"
                   />
                 </a>
               </div>
