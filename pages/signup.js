@@ -79,7 +79,7 @@ export default function Home() {
             >
               <form onSubmit={handleSubmit}>
                 <div className="card-body">
-                  <h2 className="card-title text-center text-uppercase fw-bold page_header">
+                  <h2 className="card-title text-center text-uppercase fw-bold">
                     Sign Up
                   </h2>
 

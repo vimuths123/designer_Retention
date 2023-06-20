@@ -94,7 +94,7 @@ export default function Home({ providers }) {
               style={{ maxWidth: 730, backgroundColor: "#FFF" }}
             >
               <div className="card-body">
-                <h2 className="card-title text-center text-uppercase fw-bold page_header">
+                <h2 className="card-title text-center text-uppercase fw-bold">
                   Sign In
                 </h2>
 
