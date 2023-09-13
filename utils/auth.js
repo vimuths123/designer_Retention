@@ -6,8 +6,8 @@ export const logout = () => {
     localStorage.removeItem('logintoken');
 };
 
-export const checkLogin = async () => {
-    const hasToken = await localStorage.getItem('logintoken') !== null;
+export const checkLogin =  () => {
+    const hasToken = localStorage.getItem('logintoken') !== null;
     if (hasToken) {
         return true;
     } else {
@@ -15,11 +15,6 @@ export const checkLogin = async () => {
     }
 };
 
-export const getToken = async () => {
-    const hasToken = await localStorage.getItem('logintoken') !== null;
-    if (hasToken) {
-        return true;
-    } else {
-        return false
-    }
+export const getToken = () => {
+    return localStorage.getItem('logintoken');
 };

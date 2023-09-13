@@ -4,12 +4,14 @@ import styles from "../styles/Home.module.css";
 import { signIn } from "next-auth/react"
 import { useState } from "react";
 import { useRouter } from "next/router";
+import { login } from '../utils/auth';
 
 
 export default function Home({ providers }) {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const router = useRouter();
 
   const handleSignIn = async () => {
@@ -29,10 +31,18 @@ export default function Home({ providers }) {
     });
 
     if (response.ok) {
-      console.log('Login successful');
-      router.push('/payment');
+      const responseData = await response.json();
+      if (responseData && responseData.data) {
+        login(responseData.data.token)
+        router.push('/payment');
+      } else {
+        setError('Error happend. Please contact Admin')
+      }
     } else {
-      console.log('Login failed');
+      const responseData = await response.json();
+      if (responseData && responseData.error) {
+        setError(responseData.error)
+      }
     }
   };
 
@@ -97,6 +107,10 @@ export default function Home({ providers }) {
                   <h2 className="card-title text-center text-uppercase fw-bold">
                     Sign In
                   </h2>
+
+                  <div className="text-danger mb-2">
+                    {error}
+                  </div>
 
                   <div className="mb-3">
                     <label

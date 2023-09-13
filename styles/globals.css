@@ -506,3 +506,34 @@ ul{
   position: relative;
   top: -35px;
 }
+
+
+
+.Toastify__progress-bar--success{
+  background:  #0D6EFD !important;
+}
+
+.Toastify__toast-icon svg {
+  fill: #0D6EFD !important;
+}
+
+.file-upload-button {
+  display: inline-block;
+  padding: 5px 20px;
+  background-color: white;
+  color: black;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  border: 1px solid black;
+}
+
+.file-upload-button input[type="file"] {
+  display: none;
+}
+
+.file-upload-button:hover {
+  background-color: black;
+  color: white;
+}
