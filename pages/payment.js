@@ -2,7 +2,7 @@ import Head from "next/head";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 // import styles from "../styles/Home.module.css";
-import { checkLogin } from '../utils/auth';
+import { checkLogin, getToken } from '../utils/auth';
 import { useRouter } from "next/router";
 import CheckoutForm from "../components/CheckoutForm";
 
@@ -16,11 +16,19 @@ export default function Payment() {
   const [clientSecret, setClientSecret] = useState('');
 
   useEffect(() => {
-    // Create PaymentIntent as soon as the page loads
-    fetch("/api/create-payment-intent", {
+    if (!checkLogin()) {
+      router.push('/signin');
+    }
+  }, [])
+
+  useEffect(() => {
+    fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "payment/create-payment-intent", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ items: [{ id: "xl-tshirt" }] }),
+      body: JSON.stringify({ 
+        items: [{ id: "xl-tshirt" }],
+        token: getToken()
+      }),
     })
       .then((res) => res.json())
       .then((data) => setClientSecret(data.clientSecret));
@@ -36,11 +44,7 @@ export default function Payment() {
 
   const router = useRouter();
 
-  useEffect(() => {
-    if (!checkLogin()) {
-      router.push('/signin');
-    }
-  }, [])
+  
 
   return (
     <div>
@@ -93,82 +97,6 @@ export default function Payment() {
                       <CheckoutForm />
                     </Elements>
                   )}
-                  {/* <div className="form">
-                        <div className="form-group">
-                          <label htmlFor="formGroupExampleInput">
-                            <h6>Name *</h6>
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control shadow-none p-2 mb-4 bg-light rounded "
-                            id="formGroupExampleInput"
-                            placeholder="Enter your full name"
-                          />
-                        </div>
-
-                        <div className="form-group">
-                          <label htmlFor="exampleInputEmail1">
-                            <h6>Email *</h6>
-                          </label>
-                          <input
-                            type="email"
-                            className="form-control shadow-none p-2 mb-4 bg-light rounded "
-                            id="exampleInputEmail1"
-                            aria-describedby="emailHelp"
-                            placeholder="Enter your email address"
-                          />
-                        </div>
-
-
-                        <div className="form-group">
-                          <label htmlFor="examplecardNumber">
-                            <h6>Card Details *</h6>
-                          </label>
-                          <div className="input-group  shadow-none p-2 mb-4 bg-light rounded border">
-                            <div className="input-group-append">
-                              <span className="input-group-text shadow-none bg-light rounded">
-                                
-                              </span>
-                            </div>
-                            <input
-                              type="text"
-                              className="form-control border-0 px-1 shadow-none  bg-light rounded"
-                              id="formGroupExampleInput-no"
-                              placeholder="0000 0000 0000 000"
-                            />
-                            <input
-                              type="text"
-                              className="form-control  border-0 px-1 align-right shadow-none  bg-light rounded"
-                              id="formGroupExampleInput-date"
-                              placeholder="MM /YY"
-                            />
-                            <input
-                              type="text"
-                              className="form-control border-0 px-1 shadow-none  bg-light rounded"
-                              id="formGroupExampleInput-cvv"
-                              placeholder="CVV"
-                            />
-                            <input
-                              type="text"
-                              className="form-control border-0 px-1 shadow-none  bg-light rounded"
-                              id="formGroupExampleInput-zip"
-                              placeholder="ZIP Code"
-                            />
-                          </div>
-                        </div>
-
-
-                        <button
-                          type="button"
-                          className="btn btn-primary "
-                          width="200%"
-                          style={{
-                            borderRadius: 30,
-                          }}
-                        >
-                          Submit
-                        </button>
-                      </div> */}
                 </div>
               </div>
             </div>
@@ -227,101 +155,6 @@ export default function Payment() {
             </div>
           </div>
 
-
-
-          {/* <div className="row" style={{ backgroundColor: "pink" }}>
-            <div className="col-12 col-md-7 col-lg-7">
-              <div className="card shadow p-3 mb-5 bg-body-tertiary rounded">
-                <div className="card-body">
-                  <h5 className="card-title text-left">Payment Information</h5>
-
-                  <div className="mb-3">
-                    <label
-                      for="exampleFormControlInput1"
-                      className="form-label"
-                    >
-                      Name *
-                    </label>
-                    <input
-                      type="email"
-                      className="form-control"
-                      id="exampleFormControlInput1"
-                      placeholder="Enter your username"
-                    />
-                  </div>
-
-                  <div className="mb-3">
-                    <label
-                      for="exampleFormControlInput1"
-                      className="form-label"
-                    >
-                      Email address *
-                    </label>
-                    <input
-                      type="email"
-                      className="form-control"
-                      id="exampleFormControlInput1"
-                      placeholder="Enter your email address"
-                    />
-                  </div>
-
-                  <div className="mb-3">
-                    <label
-                      for="exampleFormControlInput1"
-                      className="form-label"
-                    >
-                      Card Details *
-                    </label>
-                    <input
-                      type="number"
-                      className="form-control"
-                      id="exampleFormControlInput1"
-                      placeholder="0000 0000 0000 0000"
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <div className="row d-flex  ">
-                      <button
-                        type="button"
-                        className="btn btn-primary "
-                        width="200%"
-                      >
-                        submit
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              className="col-12 col-md-5 col-lg-5"
-              style={{ backgroundColor: "yellow" }}
-            >
-              <div
-                className="card  shadow bg-body-tertiary rounded"
-                style={{ maxWidth: 300 }}
-              >
-                <div className="card-body">
-                  <p className="card-subtitle  text-left text-primary">
-                    You have to pay
-                  </p>
-                  <h1 className="card-title text-left  mb-2 text-muted">
-                    $99/mo
-                  </h1>
-                  <hr></hr>
-                  <h6 className="card-text text-left ">What’s included</h6>
-
-                  <ul>
-                    <li>Eget nunc scelerisque viverra</li>
-                    <li>Mauris in aliquam</li>
-                    <li>Nunc faucibus a pellentesque sit</li>
-                    <li>Ut sem viverra aliquet</li>
-                    <li>Pretium vulputate sapien</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div> */}
         </div>
       </div>
 

@@ -19,13 +19,14 @@ a {
   html {
     color-scheme: dark;
   }
+
   body {
     color: white;
     background: black;
   }
 }
 
-ul li{
+ul li {
   font-size: 16px;
 }
 
@@ -88,6 +89,7 @@ ul li{
 .max814 {
   max-width: 814px;
 }
+
 .max814-2 {
   max-width: 100%;
 }
@@ -205,19 +207,19 @@ ul li{
   border-top: none;
 }
 
-.card_number{
+.card_number {
   border-bottom-right-radius: 0px;
   border-bottom-left-radius: 0px;
   /* border-bottom: none; */
   padding-right: 105px;
 }
 
-.card_expire{
+.card_expire {
   border-bottom-right-radius: 0px;
   border-right: none;
 }
 
-.card_cvv{
+.card_cvv {
   border-bottom-left-radius: 0px;
   border-left: none;
 }
@@ -234,10 +236,10 @@ ul li{
   background-color: #353541;
 }
 
-.middle-content-box-1{
+.middle-content-box-1 {
   background-color: #2A2A36;
   min-height: 750px;
-  margin-bottom:15%;
+  margin-bottom: 15%;
 }
 
 .middle-content-box-section-1 {
@@ -252,8 +254,9 @@ ul li{
   left: 0;
 
 }
+
 .middle-content-box-1 {
-height: 25%;
+  height: 25%;
 }
 
 /* 
@@ -267,14 +270,15 @@ height: 25%;
   width: 100%;
   height: 55px;
 
-  }
+}
 
-  #floatingTextarea {
-    background-color: #494659 !important;
+#floatingTextarea {
+  background-color: #494659 !important;
   color: #fff;
   /* height: 20px; */
   width: 100%;
-  }
+}
+
 .max814 {
   max-width: 814px;
 }
@@ -286,41 +290,47 @@ height: 25%;
   color: #7E899F;
 }
 
-.home_btn, .home_btn:hover, .home_btn:active{
+.home_btn,
+.home_btn:hover,
+.home_btn:active {
   padding: 10px;
   width: 320px;
   background-color: #0CA47E !important;
 }
 
-.example_hr{
+.example_hr {
   color: #5E5E5F;
   border-top: 3px solid;
   width: 40%;
   margin-top: 11px;
 }
 
-.example_span{
+.example_span {
   width: 20%;
   color: #8B8B8B;
 }
 
-.dark_gray{
+.dark_gray {
   background-color: #2A2A36;
 }
-#txt2,#txt1{
+
+#txt2,
+#txt1 {
   text-align: left;
 }
-#headerBtn-1{
+
+#headerBtn-1 {
   background-color: #0CA47E;
 }
 
-.doct_preview_body_content1{
+.doct_preview_body_content1 {
   background-color: #fff;
   color: #000;
 }
-#doct-space-1{ 
 
-  display:flex ;
+#doct-space-1 {
+
+  display: flex;
   margin: auto !important;
 
 }
@@ -328,69 +338,76 @@ height: 25%;
 .doct_preview_body_content1 {
   width: 80%;
 }
-.doct-img{
+
+.doct-img {
   width: 100% !important;
 }
-.doct-img-credit{
+
+.doct-img-credit {
   width: 25%;
 }
 
 
 .msg-content-box-1 {
- display: flex;
- justify-content: center;
- align-content: center;
- background-color: #2A2A36;
- margin: 10px;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  background-color: #2A2A36;
+  margin: 10px;
 }
 
-.header-set-collections-2{
+.header-set-collections-2 {
   display: grid;
   margin: auto;
 }
 
 /* ---2023.05.18---- */
 .payment-heading-1 {
-display: grid;
-margin: auto;
-align-content: center;
+  display: grid;
+  margin: auto;
+  align-content: center;
 }
 
-#payment_left_box, #payment_right_box{
+#payment_left_box,
+#payment_right_box {
   background-color: #2A2A36;
 }
-#payment_left_box{
+
+#payment_left_box {
   display: grid;
   justify-content: left;
   padding: 25px;
   border-radius: 10px;
 }
 
-#payment_right_box{
+#payment_right_box {
   display: grid;
   justify-content: right;
   padding: 25px;
   border-radius: 10px;
 }
-#payment_left_box_heading2{
+
+#payment_left_box_heading2 {
   color: #0CA47E;
   font-weight: 700;
 }
 
-#payment-body-content{
+#payment-body-content {
   display: flex;
   justify-content: space-around;
 }
-.card_info{
+
+.card_info {
   background-color: #fff;
   border-radius: 15px;
 }
 
-.Subscribe_btn{
+.Subscribe_btn {
   background-color: #0CA47E;
   color: #fff;
   font-weight: 700;
 }
+
 /* ----------------- */
 
 #sidebarNewChat_btn {
@@ -411,7 +428,8 @@ align-content: center;
   display: flex;
   align-items: center;
   justify-content: space-around;
-  margin: 0 50px; /* Added left and right margin */
+  margin: 0 50px;
+  /* Added left and right margin */
 }
 
 #user-input {
@@ -422,23 +440,26 @@ align-content: center;
   color: #000;
   font-size: 14px;
   border-radius: 0;
-  width:50%; /* Adjust the width as desired */
+  width: 50%;
+  /* Adjust the width as desired */
   /* justify-content: center; */
 }
 
-.bottom-input-set{
+.bottom-input-set {
   display: flex;
   justify-content: center;
   align-content: center;
   /* margin-left: 50%;
   margin-right: 50%; */
 }
-#input-container{
-   margin-left: 50%;
-   height: 25% !important;
-  
+
+#input-container {
+  margin-left: 50%;
+  height: 25% !important;
+
 
 }
+
 /* #user-input::placeholder {
   content: "\25BA Type your message...";
   padding-left: 10px;
@@ -470,7 +491,7 @@ align-content: center;
   color: #fff !important;
 } */
 
-#sidebar-list{
+#sidebar-list {
   /* list-style: none; */
   /* color: #000; */
 }
@@ -482,8 +503,8 @@ align-content: center;
   color: #000 !important;
   background-color: #000;
 } */
- 
-ul{
+
+ul {
   list-style: none;
 }
 
@@ -502,15 +523,15 @@ ul{
   font-weight: 500;
 }
 
-#sidebar-right-img{
+#sidebar-right-img {
   position: relative;
   top: -35px;
 }
 
 
 
-.Toastify__progress-bar--success{
-  background:  #0D6EFD !important;
+.Toastify__progress-bar--success {
+  background: #0D6EFD !important;
 }
 
 .Toastify__toast-icon svg {
@@ -536,4 +557,10 @@ ul{
 .file-upload-button:hover {
   background-color: black;
   color: white;
+}
+
+.right_alignments {
+  margin-left: -10px;
+  margin-right: -10px;
+  padding: 10px;
 }

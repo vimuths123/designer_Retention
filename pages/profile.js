@@ -23,6 +23,7 @@ export default function Home() {
   const [tipsTutorials, setTipsTutorials] = useState(false);
   const [userResearch, setUserResearch] = useState(false);
   const [reminders, setReminders] = useState(false);
+  const [userPayments, setUserPayments] = useState([]);
 
   useEffect(() => {
     if (!checkLogin()) {
@@ -56,6 +57,9 @@ export default function Home() {
               setTipsTutorials(responseData.user?.tips_tutorials)
               setUserResearch(responseData.user?.user_research)
               setReminders(responseData.user?.reminders)
+
+
+              setUserPayments(responseData.user?.Payments)
             }
           } else {
             const responseData = await response.json();
@@ -757,456 +761,111 @@ export default function Home() {
                               <h4 className="text-start fw-bold mb-4">Payment History</h4>
                             </div>
                             <div className="row " style={{ marginLeft: 0 }}>
-                              {/* r1 */}
-                              <div className="row">
-                                {/* 1 */}
-                                <div className="col-4 m-1">
-                                  <div
-                                    style={{
-                                      fontSize: "14px",
-                                      display: "flex",
-                                      alignItems: "left",
-                                      justifyContent: "left",
-                                      float: "left",
-                                    }}
-                                  >
-                                    {" "}
-                                    <label className="container px-0">
-                                      <input
-                                        type="radio"
-                                        checked="checked"
-                                        name="radio"
-                                      />
-                                      <span className="checkmark fw-bold">
-                                        Charge Back
-                                      </span>
-                                    </label>
+                              {userPayments?.map((item, index) => (
+                                <div className="row">
+                                  <div className="col-4 m-1">
+                                    <div
+                                      style={{
+                                        fontSize: "14px",
+                                        display: "flex",
+                                        alignItems: "left",
+                                        justifyContent: "left",
+                                        float: "left",
+                                      }}
+                                    >
+                                      <label className="container px-0">
+                                        <span className="checkmark fw-bold">
+                                          Payment
+                                        </span>
+                                      </label>
+                                    </div>
                                   </div>
-                                </div>
 
-                                {/* 2 */}
-                                <div className="col-2 m-1">
-                                  <div
-                                    style={{
-                                      fontSize: "12px",
-                                      display: "flex",
-                                      alignItems: "left",
-                                      justifyContent: "left",
-                                      float: "left",
-                                      color: "#F2994A",
-                                    }}
-                                  >
-                                    {" "}
-                                    <label className="container px-0">
-                                      <input
-                                        type="radio"
-                                        checked="checked"
-                                        name="radio"
-                                      />
-                                      <span className="checkmark">Payment</span>
-                                    </label>
+                                  {/* 2 */}
+                                  <div className="col-2 m-1">
+                                    <div
+                                      style={{
+                                        fontSize: "12px",
+                                        display: "flex",
+                                        alignItems: "left",
+                                        justifyContent: "left",
+                                        float: "left",
+                                        color: "green",
+                                      }}
+                                    >
+                                      <label className="container px-0">
+                                        <span className="checkmark">{item.status}</span>
+                                      </label>
+                                    </div>
                                   </div>
-                                </div>
 
-                                {/* 3 */}
-                                <div className="col-3 m-1">
-                                  <div
-                                    style={{
-                                      fontSize: "12px",
-                                      display: "flex",
-                                      alignItems: "left",
-                                      justifyContent: "left",
-                                      float: "left",
-                                    }}
-                                  >
-                                    {" "}
-                                    <label className="container px-0">
-                                      <span className="checkmark">
-                                        Mar 20, 2021
-                                      </span>
-                                    </label>
+                                  <div className="col-3 m-1">
+                                    <div
+                                      style={{
+                                        fontSize: "12px",
+                                        display: "flex",
+                                        alignItems: "left",
+                                        justifyContent: "left",
+                                        float: "left",
+                                      }}
+                                    >
+                                      <label className="container px-0">
+                                        <span className="checkmark">
+                                          {new Date(item.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                                          {/* {item.createdAt} */}
+                                          {/* Mar 20, 2021 */}
+                                        </span>
+                                      </label>
+                                    </div>
                                   </div>
-                                </div>
 
-                                {/* 4 */}
-                                <div className="col-1 m-1">
-                                  <div
-                                    style={{
-                                      fontSize: "12px",
-                                      display: "flex",
-                                      alignItems: "left",
-                                      justifyContent: "left",
-                                      float: "left",
-                                      color: "#EB5757",
-                                    }}
-                                  >
-                                    {" "}
-                                    <label className="container px-0">
-                                      <span className="checkmark">
-                                        -$140,20
-                                      </span>
-                                    </label>
+                                  {/* 4 */}
+                                  <div className="col-1 m-1">
+                                    <div
+                                      style={{
+                                        fontSize: "12px",
+                                        display: "flex",
+                                        alignItems: "left",
+                                        justifyContent: "left",
+                                        float: "left",
+                                        // color: "#EB5757",
+                                      }}
+                                    >
+                                      <label className="container px-0">
+                                        <span className="checkmark">
+                                          {/* $140,20 */}
+                                          ${item.amount}
+                                        </span>
+                                      </label>
+                                    </div>
                                   </div>
+
+
+                                  {/* <div className="col-1 m-1">
+                                    <div
+                                      style={{
+                                        fontSize: "12px",
+                                        display: "flex",
+                                        alignItems: "left",
+                                        justifyContent: "left",
+                                        float: "left",
+                                      }}
+                                    >
+                                      {" "}
+                                      <label className="container px-0">
+                                        <span className="checkmark">...</span>
+                                      </label>
+                                    </div>
+                                  </div> */}
                                 </div>
-
-                                {/* 5 */}
-
-                                <div className="col-1 m-1">
-                                  <div
-                                    style={{
-                                      fontSize: "12px",
-                                      display: "flex",
-                                      alignItems: "left",
-                                      justifyContent: "left",
-                                      float: "left",
-                                    }}
-                                  >
-                                    {" "}
-                                    <label className="container px-0">
-                                      <span className="checkmark">...</span>
-                                    </label>
-                                  </div>
-                                </div>
-                              </div>
-
-                              {/* r2 */}
-                              <div className="row">
-                                {/* 1 */}
-                                <div className="col-4 m-1">
-                                  <div
-                                    style={{
-                                      fontSize: "14px",
-                                      display: "flex",
-                                      alignItems: "left",
-                                      justifyContent: "left",
-                                      float: "left",
-                                    }}
-                                  >
-                                    {" "}
-                                    <label className="container px-0">
-                                      <input
-                                        type="radio"
-                                        checked="checked"
-                                        name="radio"
-                                      />
-                                      <span className="checkmark fw-bold">
-                                        Information Reqested
-                                      </span>
-                                    </label>
-                                  </div>
-                                </div>
-
-                                {/* 2 */}
-                                <div className="col-2 m-1">
-                                  <div
-                                    style={{
-                                      fontSize: "12px",
-                                      display: "flex",
-                                      alignItems: "left",
-                                      justifyContent: "left",
-                                      float: "left",
-                                      color: "#3A91C1",
-                                    }}
-                                  >
-                                    {" "}
-                                    <label className="container px-0">
-                                      <input
-                                        type="radio"
-                                        checked="checked"
-                                        name="radio"
-                                      />
-                                      <span className="checkmark">Refund</span>
-                                    </label>
-                                  </div>
-                                </div>
-
-                                {/* 3 */}
-                                <div className="col-3 m-1">
-                                  <div
-                                    style={{
-                                      fontSize: "12px",
-                                      display: "flex",
-                                      alignItems: "left",
-                                      justifyContent: "left",
-                                      float: "left",
-                                    }}
-                                  >
-                                    {" "}
-                                    <label className="container px-0">
-                                      <span className="checkmark">
-                                        Mar 20, 2021
-                                      </span>
-                                    </label>
-                                  </div>
-                                </div>
-
-                                {/* 4 */}
-                                <div className="col-1 m-1">
-                                  <div
-                                    style={{
-                                      fontSize: "12px",
-                                      display: "flex",
-                                      alignItems: "left",
-                                      justifyContent: "left",
-                                      float: "left",
-                                      color: "#5A4C79",
-                                    }}
-                                  >
-                                    {" "}
-                                    <label className="container px-0">
-                                      <span className="checkmark">+$40,20</span>
-                                    </label>
-                                  </div>
-                                </div>
-
-                                {/* 5 */}
-
-                                <div className="col-1 m-1">
-                                  <div
-                                    style={{
-                                      fontSize: "12px",
-                                      display: "flex",
-                                      alignItems: "left",
-                                      justifyContent: "left",
-                                      float: "left",
-                                    }}
-                                  >
-                                    {" "}
-                                    <label className="container px-0">
-                                      <span className="checkmark">...</span>
-                                    </label>
-                                  </div>
-                                </div>
-                              </div>
-
-                              {/* r3 */}
-                              <div className="row">
-                                {/* 1 */}
-                                <div className="col-4 m-1">
-                                  <div
-                                    style={{
-                                      fontSize: "14px",
-                                      display: "flex",
-                                      alignItems: "center",
-                                      justifyContent: "center",
-                                      float: "left",
-                                    }}
-                                  >
-                                    {" "}
-                                    <label className="container px-0">
-                                      <input
-                                        type="radio"
-                                        checked="checked"
-                                        name="radio"
-                                      />
-                                      <span className="checkmark fw-bold">
-                                        Settled
-                                      </span>
-                                    </label>
-                                  </div>
-                                </div>
-
-                                {/* 2 */}
-                                <div className="col-2 m-1">
-                                  <div
-                                    style={{
-                                      fontSize: "12px",
-                                      display: "flex",
-                                      alignItems: "center",
-                                      justifyContent: "center",
-                                      float: "left",
-                                      color: "#F2994A",
-                                    }}
-                                  >
-                                    {" "}
-                                    <label className="container px-0">
-                                      <input
-                                        type="radio"
-                                        checked="checked"
-                                        name="radio"
-                                      />
-                                      <span className="checkmark">Payment</span>
-                                    </label>
-                                  </div>
-                                </div>
-
-                                {/* 3 */}
-                                <div className="col-3 m-1">
-                                  <div
-                                    style={{
-                                      fontSize: "12px",
-                                      display: "flex",
-                                      alignItems: "center",
-                                      justifyContent: "center",
-                                      float: "left",
-                                    }}
-                                  >
-                                    {" "}
-                                    <label className="container px-0">
-                                      <span className="checkmark">
-                                        Mar 20, 2021
-                                      </span>
-                                    </label>
-                                  </div>
-                                </div>
-
-                                {/* 4 */}
-                                <div className="col-1 m-1">
-                                  <div
-                                    style={{
-                                      fontSize: "12px",
-                                      display: "flex",
-                                      alignItems: "center",
-                                      justifyContent: "center",
-                                      float: "left",
-                                      color: "#EB5757",
-                                    }}
-                                  >
-                                    {" "}
-                                    <label className="container px-0">
-                                      <span className="checkmark">-$74,70</span>
-                                    </label>
-                                  </div>
-                                </div>
-
-                                {/* 5 */}
-
-                                <div className="col-1 m-1">
-                                  <div
-                                    style={{
-                                      fontSize: "12px",
-                                      display: "flex",
-                                      alignItems: "center",
-                                      justifyContent: "center",
-                                      float: "left",
-                                    }}
-                                  >
-                                    {" "}
-                                    <label className="container px-0">
-                                      <span className="checkmark">...</span>
-                                    </label>
-                                  </div>
-                                </div>
-                              </div>
-
-                              {/* r4 */}
-                              <div className="row">
-                                {/* 1 */}
-                                <div className="col-4 m-1">
-                                  <div
-                                    style={{
-                                      fontSize: "14px",
-                                      display: "flex",
-                                      alignItems: "center",
-                                      justifyContent: "center",
-                                      float: "left",
-                                    }}
-                                  >
-                                    {" "}
-                                    <label className="container px-0">
-                                      <input
-                                        type="radio"
-                                        checked="checked"
-                                        name="radio"
-                                      />
-                                      <span className="checkmark fw-bold">
-                                        Authorised
-                                      </span>
-                                    </label>
-                                  </div>
-                                </div>
-
-                                {/* 2 */}
-                                <div className="col-2 m-1">
-                                  <div
-                                    style={{
-                                      fontSize: "12px",
-                                      display: "flex",
-                                      alignItems: "center",
-                                      justifyContent: "center",
-                                      float: "left",
-                                      color: "#5A4C79",
-                                    }}
-                                  >
-                                    {" "}
-                                    <label className="container px-0">
-                                      <input
-                                        type="radio"
-                                        checked="checked"
-                                        name="radio"
-                                      />
-                                      <span className="checkmark">Credit</span>
-                                    </label>
-                                  </div>
-                                </div>
-
-                                {/* 3 */}
-                                <div className="col-3 m-1">
-                                  <div
-                                    style={{
-                                      fontSize: "12px",
-                                      display: "flex",
-                                      alignItems: "center",
-                                      justifyContent: "center",
-                                      float: "left",
-                                    }}
-                                  >
-                                    {" "}
-                                    <label className="container px-0">
-                                      <span className="checkmark">
-                                        Mar 19, 2021
-                                      </span>
-                                    </label>
-                                  </div>
-                                </div>
-
-                                {/* 4 */}
-                                <div className="col-1 m-1">
-                                  <div
-                                    style={{
-                                      fontSize: "12px",
-                                      display: "flex",
-                                      alignItems: "center",
-                                      justifyContent: "center",
-                                      float: "left",
-                                      color: "#EB5757",
-                                    }}
-                                  >
-                                    {" "}
-                                    <label className="container px-0">
-                                      <span className="checkmark">-$1,20</span>
-                                    </label>
-                                  </div>
-                                </div>
-
-                                {/* 5 */}
-
-                                <div className="col-1 m-1">
-                                  <div
-                                    style={{
-                                      fontSize: "12px",
-                                      display: "flex",
-                                      alignItems: "center",
-                                      justifyContent: "center",
-                                      float: "left",
-                                    }}
-                                  >
-                                    {" "}
-                                    <label className="container px-0">
-                                      <span className="checkmark">...</span>
-                                    </label>
-                                  </div>
-                                </div>
-                              </div>
+                              ))}
                             </div>
                           </div>
 
                           {/*======payment-card-Left side--=======*/}
-                          <div className="col-12 col-xs-12 col-md-12 col-lg-4 col-xl-4  col-m-4 col-xs-m-4 col-md-x-4">
+                          {/* <div className="col-12 col-xs-12 col-md-12 col-lg-4 col-xl-4  col-m-4 col-xs-m-4 col-md-x-4">
                             <div className="card border border-white shadow-lg p-3 mb-5 bg-white rounded">
-                              {/* <div className="card-header">
-    Featured
-  </div> */}
+                              
                               <div className="card-body">
                                 <a
                                   href="#"
@@ -1221,7 +880,6 @@ export default function Home() {
                                 >
                                   Payment Detail
                                 </h5>
-                                {/* <h5 className="card-title">Special title treatment</h5> */}
                                 <div
                                   style={{
                                     display: "flex",
@@ -1229,13 +887,7 @@ export default function Home() {
                                     justifyContent: "center",
                                   }}
                                 >
-                                  {/* <div className="img" style={{backgroundColor:'blue' , borderRadius:50 , width:80 , height:80 }}></div> */}
-                                  {/* <Image
-                                    src="/assets/images/Mask-Group.png"
-                                    width={50}
-                                    height={50}
-                                    alt=""
-                                  /> */}
+                                  
                                   <img
                                     src="/user-img1.png"
                                     alt="Logo"
@@ -1281,7 +933,6 @@ export default function Home() {
                                   style={{ color: "#606487" }}
                                 >
                                   <span>
-                                    {/* <Image src="/assets/images/Group 18359" width={80} height={40} alt="" /> */}
                                     <h6>
                                       <span
                                         style={{
@@ -1358,7 +1009,6 @@ export default function Home() {
                                     style={{ color: "#41477A" }}
                                   >
                                     <div className="col-5">
-                                      {/* <span><p>Subtotal</p><h6>$250.00</h6></span> */}
                                     </div>
                                     <div className="col-7">
                                       <span>
@@ -1391,10 +1041,9 @@ export default function Home() {
                                   </div>
                                 </div>
 
-                                {/* amout part */}
                               </div>
                             </div>
-                          </div>
+                          </div> */}
                         </div>
                       </section>
                     </div>

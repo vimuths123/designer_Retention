@@ -5,6 +5,7 @@ import {
   useStripe,
   useElements
 } from "@stripe/react-stripe-js";
+import { checkLogin, getToken } from '../utils/auth';
 
 export default function CheckoutForm() {
   const stripe = useStripe();
@@ -13,6 +14,20 @@ export default function CheckoutForm() {
   const [email, setEmail] = React.useState('');
   const [message, setMessage] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
+
+  const savePayment = async (paymentIntent, token) => {
+    const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "payment/save_payment", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        token: token,
+        paymentIntent: paymentIntent
+      }),
+    });
+
+  }
 
   React.useEffect(() => {
     if (!stripe) {
@@ -31,6 +46,7 @@ export default function CheckoutForm() {
       switch (paymentIntent.status) {
         case "succeeded":
           setMessage("Payment succeeded!");
+          savePayment(paymentIntent, getToken())
           break;
         case "processing":
           setMessage("Your payment is processing.");
@@ -60,7 +76,7 @@ export default function CheckoutForm() {
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: "http://localhost:3000/",
+        return_url: "http://localhost:3000/payment",
       },
     });
 
@@ -85,8 +101,8 @@ export default function CheckoutForm() {
     paymentMethodOrder: ['card']
   };
 
-  
-  
+
+
 
 
   return (
