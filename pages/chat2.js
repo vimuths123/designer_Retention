@@ -14,7 +14,7 @@ const chat2 = () => {
     }, [])
 
     const [chatInput, setChatInput] = useState('');
-    const [question, setQuestion] = useState('');
+    
     const [appendedComponents, setAppendedComponents] = useState([]);
 
     const handleChatInputChange = (e) => {
@@ -22,7 +22,6 @@ const chat2 = () => {
     };
 
     const submitQuestion = async () => {
-        // setQuestion(chatInput)
         const userMessage = <UserInput message={'User: ' + chatInput} />;
         setAppendedComponents(prevComponents => [...prevComponents, userMessage]);
 
