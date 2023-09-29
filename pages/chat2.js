@@ -1,8 +1,35 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Head from "next/head";
 import Image from "next/image";
+import UserInput from '../components/UserInput';
+import AiInput from '../components/AiInput';
+import { checkLogin, getToken } from '../utils/auth';
 
 const chat2 = () => {
+
+    useEffect(() => {
+        if (!checkLogin()) {
+            router.push('/signin');
+        }
+    }, [])
+
+    const [chatInput, setChatInput] = useState('');
+    const [question, setQuestion] = useState('');
+    const [appendedComponents, setAppendedComponents] = useState([]);
+
+    const handleChatInputChange = (e) => {
+        setChatInput(e.target.value);
+    };
+
+    const submitQuestion = async () => {
+        // setQuestion(chatInput)
+        const userMessage = <UserInput message={'User: ' + chatInput} />;
+        setAppendedComponents(prevComponents => [...prevComponents, userMessage]);
+
+        const aiMessage = <AiInput message="AI: Noted on that... Please wait in a bit, Thanks!" />
+        setAppendedComponents(prevComponents => [...prevComponents, aiMessage]);
+    }
+
     return (
         <>
             <Head>
@@ -133,29 +160,34 @@ const chat2 = () => {
                             </div>
                         </div>
 
-                        <div className="col-md-9" style={{ height: "calc(100vh - 100px)", background: "#F8F9FA" }}>
-                            <div className='bg-white right_alignments'>
-                                <p>add</p>
+                        <div className="col-md-9 position-relative" style={{ height: "calc(100vh - 100px)", background: "#F8F9FA", overflow: "hidden" }}>
+                            <div style={{ height: "calc(100vh - 100px)", overflow: "scroll" }} className='right_alignments'>
+                                {appendedComponents.map((component, index) => (
+                                    <div className='' key={index}>{component}</div>
+                                ))}
                             </div>
-                            <div className='bg-white right_alignments w-100 position-absolute bottom-0 pb-5'>
-                                <div>
-                                    <input
-                                        style={{ height: 60 }}
-                                        type="text"
-                                        id="user-input"
-                                        value={'ddd'}
-                                        placeholder="Type your message..."
-                                    />
-
-                                    <button id="send-button" style={{ height: 60 }}>
-                                        <Image
-                                            src="/Group 1000003745.png"
-                                            alt="My Image"
-                                            width={25}
-                                            height={25}
-                                            className="me-2 cment_nofill"
+                            <div>
+                                <div className='bg-white right_alignments w-100 position-absolute bottom-0 pb-5'>
+                                    <div className='text-center'>
+                                        <input
+                                            style={{ height: 60 }}
+                                            type="text"
+                                            id="user-input"
+                                            value={chatInput}
+                                            onChange={handleChatInputChange}
+                                            placeholder="Type your message..."
                                         />
-                                    </button>
+
+                                        <button id="send-button" style={{ height: 60 }} onClick={submitQuestion}>
+                                            <Image
+                                                src="/Group 1000003745.png"
+                                                alt="My Image"
+                                                width={25}
+                                                height={25}
+                                                className="me-2 cment_nofill"
+                                            />
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
