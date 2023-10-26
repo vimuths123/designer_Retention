@@ -14,7 +14,7 @@ const AiInput = (props) => {
             {image && (
                 <Image
                     src={image}
-                    className="p-2"
+                    className="p-2 chtImg"
                     width={400}
                     height={450}
                     alt="Picture 2"

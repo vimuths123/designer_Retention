@@ -16,5 +16,8 @@ export const checkLogin =  () => {
 };
 
 export const getToken = () => {
-    return localStorage.getItem('logintoken');
+    if (typeof window !== 'undefined') {
+        return localStorage.getItem('logintoken');
+    }
+    return;
 };

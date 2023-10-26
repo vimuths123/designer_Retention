@@ -4,29 +4,263 @@ import Image from "next/image";
 import UserInput from '../components/UserInput';
 import AiInput from '../components/AiInput';
 import { checkLogin, getToken } from '../utils/auth';
+import { useRouter } from 'next/router';
+import LoggedHeader from '../components/LoggedHeader';
+const { v4: uuidv4 } = require('uuid');
+
 
 const chat2 = () => {
+
+    const clearChat = () => {
+        setAppendedComponents([])
+        setChatInput('')
+    }
+
+    function truncateString(str, maxLength) {
+        if (str.length > maxLength) {
+            return str.substring(0, maxLength) + "...";
+        } else {
+            return str;
+        }
+    }
+
+    const router = useRouter();
 
     useEffect(() => {
         if (!checkLogin()) {
             router.push('/signin');
         }
+
+        getUserChats()
     }, [])
 
+    var token = getToken()
+
     const [chatInput, setChatInput] = useState('');
-    
+    const [userChats, setUserChats] = useState([]);
+    const [categorizedChats, setCategorizedChats] = useState({
+        today: [],
+        last3Days: [],
+        last7Days: [],
+    });
+    const [newChat, setNewChat] = useState(true);
+    const [chatkey, setChatkey] = useState('');
+
+    const filterDates = (chats) => {
+        // Get the current date
+        const currentDate = new Date();
+
+        // Calculate the date for "Last 3 Days"
+        const last3DaysDate = new Date();
+        last3DaysDate.setDate(currentDate.getDate() - 3);
+
+        // Calculate the date for "Last 7 Days"
+        const last7DaysDate = new Date();
+        last7DaysDate.setDate(last3DaysDate.getDate() - 7);
+
+        // Group chat messages into categories
+        const todayChats = [];
+        const last3DaysChats = [];
+        const last7DaysChats = [];
+
+        chats.forEach((chat) => {
+            const createdAtDate = new Date(chat.createdAt);
+            if (createdAtDate.toDateString() === currentDate.toDateString()) {
+                todayChats.push(chat);
+            } else if (createdAtDate >= last3DaysDate && createdAtDate < currentDate) {
+                last3DaysChats.push(chat);
+            } else if (createdAtDate >= last7DaysDate && createdAtDate < last3DaysDate) {
+                last7DaysChats.push(chat);
+            }
+        });
+
+        // Return an object containing all three categories
+        return {
+            today: todayChats,
+            last3Days: last3DaysChats,
+            last7Days: last7DaysChats,
+        };
+    };
+
+
+    const getUserChats = async () => {
+        try {
+            const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "chat/prevoius_chats", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    token: token,
+                }),
+            });
+
+            if (response.ok) {
+                const responseData = await response.json();
+                if (responseData && responseData.user) {
+                    const categorizedChatsData = await filterDates(responseData.user?.Chats);
+                    // console.log(categorizedChatsData)
+
+                    setCategorizedChats(categorizedChatsData);
+                    setUserChats(responseData.user?.Chats.reverse())
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error.message);
+        }
+    }
+
+
+
     const [appendedComponents, setAppendedComponents] = useState([]);
 
     const handleChatInputChange = (e) => {
         setChatInput(e.target.value);
     };
 
-    const submitQuestion = async () => {
-        const userMessage = <UserInput message={'User: ' + chatInput} />;
-        setAppendedComponents(prevComponents => [...prevComponents, userMessage]);
+    const handleKeyPress = (event) => {
+        if (event.key === 'Enter' || event.keyCode === 13) {
+            submitQuestion()
+        }
+    }
 
-        const aiMessage = <AiInput message="AI: Noted on that... Please wait in a bit, Thanks!" />
-        setAppendedComponents(prevComponents => [...prevComponents, aiMessage]);
+    const setImageMessage = async (sender, content, getImage, chatkey, newchat) => {
+        let image;
+        if (getImage) {
+            const response = await fetch(process.env.NEXT_PUBLIC_PYTHON_SERVER_URL + "generate_webpage", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': token
+                },
+                body: JSON.stringify({
+                    prompt: chatInput,
+                    category: "landingpage"
+                })
+            });
+
+
+            if (response.ok) {
+                const responseData = await response.json();
+                if (responseData && responseData.image) {
+                    image = await responseData.image;
+
+                    if (sender == "User") {
+                        const userMessage = <UserInput message={sender + ': ' + content} />;
+                        setAppendedComponents(prevComponents => [...prevComponents, userMessage]);
+                    } else if (sender == "Ai") {
+                        const aiMessage = <AiInput message={sender + ': ' + content} image={image} />
+                        setAppendedComponents(prevComponents => [...prevComponents, aiMessage]);
+                    }
+
+                    console.log(image)
+
+                    try {
+                        const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "chat/save_chat", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                token: token,
+                                content: content,
+                                imageUrl: image,
+                                chatkey: chatkey,
+                                sender: sender,
+                                newchat: newchat
+                            }),
+                        });
+                    } catch (error) {
+                        console.error('An error occurred:', error);
+                    }
+                }
+            }
+        }
+    }
+
+    const setMessage = async (sender, content, getImage, chatkey, newchat) => {
+        if (sender == "User") {
+            const userMessage = <UserInput message={sender + ': ' + content} />;
+            setAppendedComponents(prevComponents => [...prevComponents, userMessage]);
+        } else if (sender == "Ai") {
+            const aiMessage = <AiInput message={sender + ': ' + content} />
+            setAppendedComponents(prevComponents => [...prevComponents, aiMessage]);
+        }
+
+        try {
+            const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "chat/save_chat", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    token: token,
+                    content: content,
+                    imageUrl: '',
+                    chatkey: chatkey,
+                    sender: sender,
+                    newchat: newchat
+                }),
+            });
+        } catch (error) {
+            console.error('An error occurred:', error);
+        }
+    }
+
+
+    const submitQuestion = async () => {
+        clearChat()
+
+        const uniqueRandomId = uuidv4();
+        setNewChat(false)
+        setChatkey(uniqueRandomId)
+
+
+
+        await Promise.all([
+            setMessage('User', chatInput, '', uniqueRandomId, true),
+            setMessage('Ai', 'Noted on that... Please wait in a bit, Thanks!', '', uniqueRandomId, false),
+            setImageMessage('Ai', 'Thank you for waiting! Kindly see the results below:', true, uniqueRandomId, false),
+        ]);
+        getUserChats()
+    }
+
+    const getOldChat = async (chatkey) => {
+        router.push({
+            pathname: '/chat2',
+            query: { chatkey: chatkey }
+        });
+        clearChat()
+
+        const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "chat/get_chat", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                token: token,
+                chatkey: chatkey,
+            }),
+        })
+
+        if (response.ok) {
+            const responseData = await response.json();
+            if (responseData && responseData.chat && responseData.chat.Messages) {
+                const messages = responseData.chat.Messages;
+                console.log(messages)
+                messages.forEach(message => {
+                    if (message.owner == "User") {
+                        const userMessage = <UserInput message={message.content} />
+                        setAppendedComponents(prevComponents => [...prevComponents, userMessage]);
+                    } else if (message.owner == "Ai") {
+                        const aiMessage = <AiInput message={message.content} image={message.image_url}/>
+                        setAppendedComponents(prevComponents => [...prevComponents, aiMessage]);
+                    }
+                })
+            }
+        } else {
+            console.log('error happened')
+        }
     }
 
     return (
@@ -41,72 +275,28 @@ const chat2 = () => {
                 className="container-fluid bg-light"
                 style={{ backgroundColor: "#FFFFFF" }}
             >
-                <header style={{ backgroundColor: "#F7F9FF" }}>
-                    <div className="header p-2" style={{ backgroundColor: "#F7F9FF" }}>
-                        <nav className="navbar navbar-expand-lg navbar-light bg-light">
-                            <div className="container-fluid">
-                                <a className="navbar-brand" href="#">
-                                    <img
-                                        src="/designerr-logo.png"
-                                        alt="Logo"
-                                        width="72%"
-                                        height="auto"
-                                        className="d-inline-block align-text-top"
-                                    />
-                                </a>
-
-                                <div
-                                    className="collapse navbar-collapse d-flex justify-content-end"
-                                    id="navbarSupportedContent"
-                                >
-                                    <div className="d-flex justify-content-end">
-                                        <img
-                                            src="/user-img1.png"
-                                            alt="Logo"
-                                            width="72%"
-                                            height="auto"
-                                            className="d-inline-block align-text-top"
-                                        />
-                                        <p style={{ fontSize: 16 }}>John Doe</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </nav>
-                    </div>
-                </header>
+                <LoggedHeader />
 
                 <div>
                     <div className="row" style={{ height: "calc(100vh - 100px)" }}>
                         <div className="col-md-3 bg-white" style={{ height: "calc(100vh - 100px)", overflow: "scroll" }}>
-                            <button className="new-chat mt-3" id="sidebarNewChat_btn">
+                            <button className="new-chat mt-3" id="sidebarNewChat_btn" onClick={clearChat}>
                                 + New Chat
                             </button>
 
                             <div className="mt-4">
-                                <p className="tyni-heading1 mx-3 ">Today</p>
+                                {/* <p className="tyni-heading1 mx-3 ">Today</p> */}
+                                <p className="tyni-heading1 mx-3 ">Previous Chats</p>
                                 <ul className="text-start">
-                                    <li>
-                                        <span className="custom-li-style"></span> Lorem Ipsum
-                                        Sit Dolor...
-                                    </li>
-                                    <li>
-                                        <span className="custom-li-style"></span> Lorem Ipsum
-                                        Sit Dolor...
-                                    </li>
-                                    <li>
-
-                                        <span className="custom-li-style"></span> Lorem Ipsum
-                                        Sit Dolor...
-                                    </li>
-                                    <li>
-
-                                        <span className="custom-li-style"></span> Lorem Ipsum
-                                        Sit Dolor...
-                                    </li>
+                                    {userChats?.map((item, index) => (
+                                        <li className='hover-pointer' key={item.id} onClick={() => getOldChat(item.chatkey)}>
+                                            <span className="custom-li-style" key={item.id}></span> {truncateString(item.prompt, 22)}
+                                        </li>
+                                    ))}
                                 </ul>
                             </div>
 
-                            <div className="mt-4">
+                            {/* <div className="mt-4">
                                 <p className="tyni-heading1 mx-3 ">Yesterday</p>
                                 <ul className="text-start">
                                     <li>
@@ -156,7 +346,7 @@ const chat2 = () => {
                                         Sit Dolor...
                                     </li>
                                 </ul>
-                            </div>
+                            </div> */}
                         </div>
 
                         <div className="col-md-9 position-relative" style={{ height: "calc(100vh - 100px)", background: "#F8F9FA", overflow: "hidden" }}>
@@ -174,6 +364,7 @@ const chat2 = () => {
                                             id="user-input"
                                             value={chatInput}
                                             onChange={handleChatInputChange}
+                                            onKeyPress={handleKeyPress}
                                             placeholder="Type your message..."
                                         />
 
