@@ -5,6 +5,7 @@ const Header = ({ name, image }) => {
         <>
             <header style={{ backgroundColor: "#F7F9FF" }}>
                 <div className="header p-2" style={{ backgroundColor: "#F7F9FF" }}>
+
                     <nav className="navbar navbar-expand-lg navbar-light bg-light">
                         <div className="container-fluid">
                             <a className="navbar-brand" href="#">
@@ -23,15 +24,13 @@ const Header = ({ name, image }) => {
                             >
                                 <div className="d-flex justify-content-end">
                                     <img
-                                        src={image}
+                                        src="/user-img1.png"
                                         alt="Logo"
-                                        width="50"
-                                        height="50"
-                                        className="d-inline-block align-text-top rounded-circle"
+                                        width="72%"
+                                        height="auto"
+                                        className="d-inline-block align-text-top"
                                     />
-                                    <p style={{ fontSize: 16, fontWeight: 'bold', height: 50, lineHeight: '50px', marginLeft: 10 }}>
-                                        {name}
-                                    </p>
+                                    <p style={{ fontSize: 16 }}>John Doe</p>
                                 </div>
                             </div>
                         </div>
