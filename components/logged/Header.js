@@ -29,7 +29,7 @@ const Header = ({ name, image }) => {
                                 id="navbarSupportedContent"
                             >
                                 <div className="d-flex justify-content-end">
-                                    <div className="dropdown">
+                                    <div className="dropdown me-2">
                                         <div className="btn d-flex justify-content-end" data-bs-toggle="dropdown">
                                             <img
                                                 src={image}
