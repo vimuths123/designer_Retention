@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import { login } from '../utils/auth';
 import Layout from "../components/notlogged/Layout";
+import Link from 'next/link';
 
 
 export default function Home({ providers }) {
@@ -110,6 +111,8 @@ export default function Home({ providers }) {
                 >
                   Sign in with Email
                 </button>
+
+                <p className="text-center">Not a member? <Link href="/signup">Register</Link></p>
 
 
                 <button

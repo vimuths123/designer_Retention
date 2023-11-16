@@ -11,6 +11,104 @@ import Header from '../components/Header';
 import Layout from "../components/logged/Layout";
 
 export default function Home() {
+  var token = getToken()
+  // --------------------------
+
+  const [chatInput, setChatInput] = useState('');
+  const [userChats, setUserChats] = useState([]);
+  const [categorizedChats, setCategorizedChats] = useState({
+    today: [],
+    last3Days: [],
+    last7Days: [],
+  });
+
+  function truncateString(str, maxLength) {
+    if (str.length > maxLength) {
+      return str.substring(0, maxLength) + "...";
+    } else {
+      return str;
+    }
+  }
+
+
+  const newChatClk = () => {
+    clearChat()
+    router.push({
+      pathname: '/chat2'
+    });
+  }
+
+  useEffect(() => {
+    getUserChats()
+
+  }, [])
+
+
+  const getUserChats = async () => {
+    try {
+      const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "chat/prevoius_chats", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          token: token,
+        }),
+      });
+
+      if (response.ok) {
+        const responseData = await response.json();
+        if (responseData && responseData.user) {
+          const categorizedChatsData = await filterDates(responseData.user?.Chats);
+          // console.log(categorizedChatsData)
+
+          setCategorizedChats(categorizedChatsData);
+          setUserChats(responseData.user?.Chats.reverse())
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error.message);
+    }
+  }
+
+  const filterDates = (chats) => {
+    // Get the current date
+    const currentDate = new Date();
+
+    // Calculate the date for "Last 3 Days"
+    const last3DaysDate = new Date();
+    last3DaysDate.setDate(currentDate.getDate() - 3);
+
+    // Calculate the date for "Last 7 Days"
+    const last7DaysDate = new Date();
+    last7DaysDate.setDate(last3DaysDate.getDate() - 7);
+
+    // Group chat messages into categories
+    const todayChats = [];
+    const last3DaysChats = [];
+    const last7DaysChats = [];
+
+    chats.forEach((chat) => {
+      const createdAtDate = new Date(chat.createdAt);
+      if (createdAtDate.toDateString() === currentDate.toDateString()) {
+        todayChats.push(chat);
+      } else if (createdAtDate >= last3DaysDate && createdAtDate < currentDate) {
+        last3DaysChats.push(chat);
+      } else if (createdAtDate >= last7DaysDate && createdAtDate < last3DaysDate) {
+        last7DaysChats.push(chat);
+      }
+    });
+
+    // Return an object containing all three categories
+    return {
+      today: todayChats,
+      last3Days: last3DaysChats,
+      last7Days: last7DaysChats,
+    };
+  };
+
+
+  // --------------------------
 
   const router = useRouter();
   // const [user, setUser] = useState([]);
@@ -30,8 +128,6 @@ export default function Home() {
     if (!checkLogin()) {
       router.push('/signin');
     } else {
-
-      var token = getToken()
 
       const fetchData = async () => {
         try {
@@ -189,99 +285,21 @@ export default function Home() {
         <div className="row">
           <div className="container max814-2">
             <div className="row">
-              <div
-                className="col-3"
-                style={{
-                  backgroundColor: "#fff",
-                  color: "#000",
-                  height: "850px",
-                }}
-              >
-                <div style={{ backgroundColor: "transparent" }}>
-                  <div className="m-3">
-                    <button className="new-chat" id="sidebarNewChat_btn">
-                      + New Chat
-                    </button>
-                  </div>
+              <div className="col-md-3 bg-white" style={{ height: "calc(100vh - 100px)", overflow: "scroll" }}>
+                <button className="new-chat mt-3" id="sidebarNewChat_btn" onClick={newChatClk}>
+                  + New Chat
+                </button>
 
-                  {/* today */}
-                  <div className="mt-4">
-                    <p className="tyni-heading1 mx-3 ">Today</p>
-                    <ul className="text-start">
-                      <li>
-                        {" "}
-                        <span className="custom-li-style"></span> Lorem Ipsum
-                        Sit Dolor...{" "}
+                <div className="mt-4">
+                  {/* <p className="tyni-heading1 mx-3 ">Today</p> */}
+                  <p className="tyni-heading1 mx-3 ">Previous Chats</p>
+                  <ul className="text-start">
+                    {userChats?.map((item, index) => (
+                      <li className='hover-pointer' key={item.id} onClick={() => getOldChat(item.chatkey)}>
+                        <span className="custom-li-style" key={item.id}></span> {truncateString(item.prompt, 22)}
                       </li>
-                      <li>
-                        {" "}
-                        <span className="custom-li-style"></span> Lorem Ipsum
-                        Sit Dolor...{" "}
-                      </li>
-                      <li>
-                        {" "}
-                        <span className="custom-li-style"></span> Lorem Ipsum
-                        Sit Dolor...{" "}
-                      </li>
-                      <li>
-                        {" "}
-                        <span className="custom-li-style"></span> Lorem Ipsum
-                        Sit Dolor...{" "}
-                      </li>
-                    </ul>
-                  </div>
-                  {/* Yesterday */}
-                  <div className="mt-4">
-                    <p className="tyni-heading1 mx-3 ">Yesterday</p>
-                    <ul className="text-start">
-                      <li>
-                        {" "}
-                        <span className="custom-li-style"></span> Lorem Ipsum
-                        Sit Dolor...{" "}
-                      </li>
-                      <li>
-                        {" "}
-                        <span className="custom-li-style"></span> Lorem Ipsum
-                        Sit Dolor...{" "}
-                      </li>
-                      <li>
-                        {" "}
-                        <span className="custom-li-style"></span> Lorem Ipsum
-                        Sit Dolor...{" "}
-                      </li>
-                      <li>
-                        {" "}
-                        <span className="custom-li-style"></span> Lorem Ipsum
-                        Sit Dolor...{" "}
-                      </li>
-                    </ul>
-                  </div>
-                  {/* Previous 7 Days */}
-                  <div className="mt-4">
-                    <p className="tyni-heading1 mx-3 ">Previous 7 Days</p>
-                    <ul className="text-start">
-                      <li>
-                        {" "}
-                        <span className="custom-li-style"></span> Lorem Ipsum
-                        Sit Dolor...{" "}
-                      </li>
-                      <li>
-                        {" "}
-                        <span className="custom-li-style"></span> Lorem Ipsum
-                        Sit Dolor...{" "}
-                      </li>
-                      <li>
-                        {" "}
-                        <span className="custom-li-style"></span> Lorem Ipsum
-                        Sit Dolor...{" "}
-                      </li>
-                      <li>
-                        {" "}
-                        <span className="custom-li-style"></span> Lorem Ipsum
-                        Sit Dolor...{" "}
-                      </li>
-                    </ul>
-                  </div>
+                    ))}
+                  </ul>
                 </div>
               </div>
               <div
@@ -1047,6 +1065,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-    </Layout> 
- );
+    </Layout>
+  );
 }

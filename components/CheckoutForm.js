@@ -76,7 +76,7 @@ export default function CheckoutForm() {
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: "http://localhost:3000/payment",
+        return_url: "http://localhost:3000/",
       },
     });
 
@@ -107,10 +107,10 @@ export default function CheckoutForm() {
 
   return (
     <form id="payment-form" onSubmit={handleSubmit}>
-      <LinkAuthenticationElement
+      {/* <LinkAuthenticationElement
         id="link-authentication-element"
         onChange={(e) => setEmail(e.target.value)}
-      />
+      /> */}
       <PaymentElement id="payment-element" options={paymentElementOptions} />
       <button className="btn btn-primary mt-2" disabled={isLoading || !stripe || !elements} id="submit">
         <span id="button-text">

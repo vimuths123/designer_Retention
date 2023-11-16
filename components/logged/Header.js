@@ -1,7 +1,19 @@
 import Head from 'next/head'
 import React from 'react'
+import Link from 'next/link'
+import { logout } from '../../utils/auth';
+import { useRouter } from "next/router";
+
 
 const Header = ({ name, image }) => {
+
+    const router = useRouter();
+
+    const logoutClk = () =>{
+        logout();
+        router.push('/signin');
+    }
+
     return (
         <>
             <Head>
@@ -14,7 +26,7 @@ const Header = ({ name, image }) => {
                     <nav className="navbar navbar-expand-lg navbar-light bg-light">
                         <div className="container-fluid">
 
-                            <a className="navbar-brand" href="#">
+                            <Link className="navbar-brand" href="/">
                                 <img
                                     src="/designerr-logo.png"
                                     alt="Logo"
@@ -22,7 +34,7 @@ const Header = ({ name, image }) => {
                                     height="auto"
                                     className="d-inline-block align-text-top"
                                 />
-                            </a>
+                            </Link>
 
                             <div
                                 className="collapse navbar-collapse d-flex justify-content-end"
@@ -43,8 +55,12 @@ const Header = ({ name, image }) => {
                                             </p>
                                         </div>
                                         <ul className="dropdown-menu">
-                                            <li><a className="dropdown-item" href="#">Log Out</a></li>
-                                            <li><a className="dropdown-item" href="#">Profile</a></li>
+                                            <li>
+                                                <a className="dropdown-item" onClick={logoutClk} href="#">Log Out</a>
+                                            </li>
+                                            <li>
+                                                <Link className="dropdown-item" href="/profile">Profile</Link>
+                                            </li>
                                         </ul>
                                     </div>
 
