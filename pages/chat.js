@@ -7,7 +7,7 @@ import UserInput from '../components/UserInput';
 import AiInput from '../components/AiInput';
 import axios from 'axios';
 
-const chat = () => {
+const Chat = () => {
 
   const [chatInput, setChatInput] = useState('');
   const [newchat, setNewChat] = useState(false);
@@ -350,4 +350,4 @@ const chat = () => {
   )
 }
 
-export default chat
+export default Chat
