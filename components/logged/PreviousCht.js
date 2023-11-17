@@ -8,6 +8,7 @@ const PreviousCht = () => {
             </button>
 
             <div className="mt-4">
+                
                 {/* <p className="tyni-heading1 mx-3 ">Today</p> */}
                 <p className="tyni-heading1 mx-3 ">Previous Chats</p>
                 <ul className="text-start">
