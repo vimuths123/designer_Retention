@@ -773,7 +773,7 @@ export default function Home() {
                             </div>
                             <div className="row " style={{ marginLeft: 0 }}>
                               {userPayments?.map((item, index) => (
-                                <div className="row">
+                                <div className="row" key={index}>
                                   <div className="col-4 m-1">
                                     <div
                                       style={{
