@@ -11,7 +11,7 @@ import Layout from '../components/logged/Layout';
 const { v4: uuidv4 } = require('uuid');
 
 
-const chat2 = () => {
+const Chat2 = () => {
 
     const newChatClk = () => {
         clearChat()
@@ -398,4 +398,4 @@ const chat2 = () => {
     )
 }
 
-export default chat2
+export default Chat2
