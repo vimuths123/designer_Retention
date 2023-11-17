@@ -492,7 +492,7 @@ export default function Home() {
                                       marginBottom: 10,
                                     }}
                                   >
-                                    Password (Keep empty if you don't need to change)
+                                    Password (Keep empty if you don&apos;t need to change)
                                   </label>
                                   <input
                                     type="password"
@@ -755,7 +755,7 @@ export default function Home() {
                             </div>
                             <div className="row " style={{ marginLeft: 0 }}>
                               {userPayments?.map((item, index) => (
-                                <div className="row">
+                                <div className="row" key={index}>
                                   <div className="col-4 m-1">
                                     <div
                                       style={{
