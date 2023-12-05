@@ -42,7 +42,7 @@ export default function Home({ providers }) {
         setError('Error happend. Please contact Admin')
       }
     } else {
-      const responseData = await response.json();
+      const responseData = await response.json(); 
       if (responseData && responseData.error) {
         setError(responseData.error)
       }
