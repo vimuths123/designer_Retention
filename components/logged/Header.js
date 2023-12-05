@@ -44,7 +44,7 @@ const Header = ({ name, image }) => {
                                     <div className="dropdown me-2">
                                         <div className="btn d-flex justify-content-end" data-bs-toggle="dropdown">
                                             <img
-                                                src={image}
+                                                src={image || "images/avatar.png"}
                                                 alt="Logo"
                                                 width="50"
                                                 height="50"

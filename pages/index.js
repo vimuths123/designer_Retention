@@ -16,7 +16,7 @@ const Index = () => {
     const newChatClk = () => {
         clearChat()
         router.push({
-            pathname: '/chat2'
+            pathname: '/'
         });
     }
 
@@ -238,7 +238,7 @@ const Index = () => {
     const getOldChat = async (chatkey) => {
         clearChat()
         router.push({
-            pathname: '/chat2',
+            pathname: '/',
             query: { chatkey: chatkey }
         });
         
@@ -380,7 +380,7 @@ const Index = () => {
 
                                         <button id="send-button" style={{ height: 60 }} onClick={submitQuestion}>
                                             <Image
-                                                src="/Group 1000003745.png"
+                                                src="/group_1000003745.png"
                                                 alt="My Image"
                                                 width={25}
                                                 height={25}

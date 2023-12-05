@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { login } from '../utils/auth';
 import Layout from "../components/notlogged/Layout";
 import Link from 'next/link';
+import GoogleSignIn from "../components/login/googleAuthSignIn";
 
 
 export default function Home({ providers }) {
@@ -16,9 +17,9 @@ export default function Home({ providers }) {
   const [error, setError] = useState('');
   const router = useRouter();
 
-  const handleSignIn = async () => {
-    await signIn('google');
-  };
+  // const handleSignIn = async () => {
+  //   await signIn('google');
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -53,7 +54,7 @@ export default function Home({ providers }) {
     <div>
       <Layout>
         <div
-          className="body-content d-flex justify-content-center mt-5 bg-light"
+          className="body-content d-flex justify-content-center pt-5 bg-white"
           style={{ backgroundColor: "#FFF" }}
         >
           <div
@@ -80,7 +81,7 @@ export default function Home({ providers }) {
                   <input
                     type="email"
                     className="form-control"
-                    id="exampleFormControlInput1"
+                    id="exampleFormControlInput2"
                     placeholder="Enter your email"
                     width="100%"
                     height="85%"
@@ -98,7 +99,7 @@ export default function Home({ providers }) {
                   <input
                     type="password"
                     className="form-control"
-                    id="exampleFormControlInput1"
+                    id="exampleFormControlInput3"
                     placeholder="Enter your email password"
                     width="100%"
                     onChange={(e) => setPassword(e.target.value)}
@@ -115,7 +116,7 @@ export default function Home({ providers }) {
                 <p className="text-center">Not a member? <Link href="/signup">Register</Link></p>
 
 
-                <button
+                {/* <button
                   type="button"
                   className="btn btn-outline-dark w-100 mb-4 fw-bold"
                   width="100%"
@@ -128,8 +129,9 @@ export default function Home({ providers }) {
                     ></img>
                   </span>
                   Sign in with Google
-                </button>
+                </button> */}
 
+                <GoogleSignIn/>
 
                 <button
                   type="button"

@@ -10,7 +10,7 @@ const Header = ({ name, image }) => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <header style={{ backgroundColor: "#F7F9FF" }}>
-                <div className="header p-2" style={{ backgroundColor: "#F7F9FF" }}>
+                <div className="header p-2 py-3" style={{ backgroundColor: "#F7F9FF" }}>
                     <nav className="navbar navbar-expand-lg navbar-light bg-light">
                         <div className="container-fluid">
 
@@ -24,7 +24,7 @@ const Header = ({ name, image }) => {
                                 />
                             </a>
 
-                            <div
+                            {/* <div
                                 className="collapse navbar-collapse d-flex justify-content-end"
                                 id="navbarSupportedContent"
                             >
@@ -49,7 +49,7 @@ const Header = ({ name, image }) => {
                                     </div>
 
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     </nav>
                 </div>

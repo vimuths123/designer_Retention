@@ -5,6 +5,7 @@ import { useState } from "react";
 import { login } from '../utils/auth';
 import { useRouter } from "next/router";
 import Layout from "../components/notlogged/Layout";
+import Link from "next/link";
 
 export default function Home() {
 
@@ -58,7 +59,7 @@ export default function Home() {
     <div>
       <Layout>
         <div
-          className="body-content d-flex justify-content-center mt-5 bg-light"
+          className="body-content d-flex justify-content-center pt-5 bg-white"
           style={{ backgroundColor: "#FFF" }}
         >
           <div
@@ -174,11 +175,9 @@ export default function Home() {
                 <div className="mb-3">
                   <p className="text-center">
                     Already have an account?
-                    <span>
-                      <a className="text-primary" href="#">
-                        {" "}
-                        Sign in
-                      </a>
+                    
+                    <span className="ms-2">
+                      <Link className="text-primary" href="/signin">Sign in</Link>
                     </span>
                   </p>
                 </div>
