@@ -131,7 +131,7 @@ export default function Home({ providers }) {
                   Sign in with Google
                 </button> */}
 
-                <GoogleSignIn/>
+                <GoogleSignIn page="Sign In"/>
 
                 <button
                   type="button"

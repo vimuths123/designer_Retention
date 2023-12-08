@@ -27,7 +27,7 @@ export default function Payment() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        items: [{ id: "xl-tshirt" }],
+        items: [{ id: "package" }],
         token: getToken()
       }),
     })

@@ -98,7 +98,16 @@ export default function CheckoutForm() {
 
   const paymentElementOptions = {
     layout: "tabs",
-    paymentMethodOrder: ['card']
+    paymentMethodOrder: ['card'],
+    // fields: {
+    //   billingDetails: {
+    //     // name: 'auto',
+    //     // email: 'auto',
+    //     address: {
+    //       country: 'never'
+    //     }
+    //   }
+    // }
   };
 
 

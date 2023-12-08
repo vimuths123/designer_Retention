@@ -6,6 +6,7 @@ import { login } from '../utils/auth';
 import { useRouter } from "next/router";
 import Layout from "../components/notlogged/Layout";
 import Link from "next/link";
+import GoogleSignIn from "../components/login/googleAuthSignIn";
 
 export default function Home() {
 
@@ -133,7 +134,9 @@ export default function Home() {
                   </button>
                 </div>
 
-                <div className="mb-4">
+                <GoogleSignIn page="Sign Up"/>
+                {/* <div className="mb-4">
+                  
                   <button
                     type="button"
                     className="btn btn-outline-dark w-100 fw-bold"
@@ -147,7 +150,7 @@ export default function Home() {
                     </span>
                     Sign in with Google
                   </button>
-                </div>
+                </div> */}
 
                 <div className="mb-3">
                   <button
