@@ -787,8 +787,8 @@ export default function Home() {
                             <div className="row">
                               <div className="col-12">
                                 {userPayments?.map((item, index) => (
-                                  <div>
-                                    <div className="row" key={index}>
+                                  <div key={index}>
+                                    <div className="row" >
                                       <div className="col-3 m-1">
                                         <div
                                           style={{
