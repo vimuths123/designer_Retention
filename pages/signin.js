@@ -8,6 +8,8 @@ import { login } from '../utils/auth';
 import Layout from "../components/notlogged/Layout";
 import Link from 'next/link';
 import GoogleSignIn from "../components/login/googleAuthSignIn";
+import FacebookAuth from "react-facebook-auth";
+import FacebookSignIn from "../components/login/facebookAuthSignIn";
 
 
 export default function Home({ providers }) {
@@ -16,6 +18,7 @@ export default function Home({ providers }) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
+
 
   // const handleSignIn = async () => {
   //   await signIn('google');
@@ -42,7 +45,7 @@ export default function Home({ providers }) {
         setError('Error happend. Please contact Admin')
       }
     } else {
-      const responseData = await response.json(); 
+      const responseData = await response.json();
       if (responseData && responseData.error) {
         setError(responseData.error)
       }
@@ -115,38 +118,9 @@ export default function Home({ providers }) {
 
                 <p className="text-center">Not a member? <Link href="/signup">Register</Link></p>
 
+                <GoogleSignIn page="Sign In" />
 
-                {/* <button
-                  type="button"
-                  className="btn btn-outline-dark w-100 mb-4 fw-bold"
-                  width="100%"
-                  onClick={handleSignIn}
-                >
-                  <span>
-                    <img
-                      className="img-thumbnail bg-transparent border-0"
-                      src="/Google logo.svg"
-                    ></img>
-                  </span>
-                  Sign in with Google
-                </button> */}
-
-                <GoogleSignIn page="Sign In"/>
-
-                <button
-                  type="button"
-                  className="btn btn-outline-dark w-100 mb-4 fw-bold"
-                  width="100%"
-                >
-                  <span>
-                    <img
-                      className="img-thumbnail bg-transparent border-0"
-                      src="/fb-logo.svg"
-                    ></img>
-                  </span>
-                  Sign in with Facebook
-                </button>
-
+                <FacebookSignIn />
 
                 <div className="mb-3">
                   <p className="text-center">

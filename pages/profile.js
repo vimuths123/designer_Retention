@@ -22,6 +22,8 @@ export default function Home() {
     last7Days: [],
   });
 
+  
+
   function truncateString(str, maxLength) {
     if (str.length > maxLength) {
       return str.substring(0, maxLength) + "...";
@@ -123,6 +125,11 @@ export default function Home() {
   const [userResearch, setUserResearch] = useState(false);
   const [reminders, setReminders] = useState(false);
   const [userPayments, setUserPayments] = useState([]);
+  const [currenPrice, setCurrenPrice] = useState('00.00');
+
+  function addPrice(price) {
+    setCurrenPrice(price);
+  }
 
   useEffect(() => {
     if (!checkLogin()) {
@@ -157,6 +164,9 @@ export default function Home() {
 
 
               setUserPayments(responseData.user?.Payments)
+              if(responseData.user?.Payments){
+                setCurrenPrice(responseData.user?.Payments[0]?.amount)
+              }
             }
           } else {
             const responseData = await response.json();
@@ -748,9 +758,12 @@ export default function Home() {
                         role="tabpanel"
                         aria-labelledby="pills-billing-tab"
                       >
-                        <div className="row">
-                          <div className="col-12 col-xs-12 col-md-12 col-lg-8 col-xl-8">
+                        <div className="row ps-3 credit_card">
+                          <div className="col-12 col-xs-12 col-md-12 col-lg-7 col-xl-7">
                             <div className="row mb-4">
+                              <div className="row ">
+                                <h2 className="text-start fw-bold mb-4">Your Credit Card</h2>
+                              </div>
                               <Cards
                                 name={"Wiil B Baker"}
                                 number={"**** **** **** 0000"}
@@ -769,96 +782,154 @@ export default function Home() {
                               />*/}
                             </div>
                             <div className="row ">
-                              <h4 className="text-start fw-bold mb-4">Payment History</h4>
+                              <h4 className="text-start fw-bold mb-4 mt-4">Payment History</h4>
                             </div>
-                            <div className="row " style={{ marginLeft: 0 }}>
-                              {userPayments?.map((item, index) => (
-                                <div className="row" key={index}>
-                                  <div className="col-4 m-1">
-                                    <div
-                                      style={{
-                                        fontSize: "14px",
-                                        display: "flex",
-                                        alignItems: "left",
-                                        justifyContent: "left",
-                                        float: "left",
-                                      }}
-                                    >
-                                      <label className="container px-0">
-                                        <span className="checkmark fw-bold">
-                                          Payment
-                                        </span>
-                                      </label>
+                            <div className="row">
+                              <div className="col-12">
+                                {userPayments?.map((item, index) => (
+                                  <div>
+                                    <div className="row" key={index}>
+                                      <div className="col-3 m-1">
+                                        <div
+                                          style={{
+                                            // fontSize: "14px",
+                                            display: "flex",
+                                            alignItems: "left",
+                                            justifyContent: "left",
+                                            float: "left",
+                                          }}
+                                        >
+                                          <label className="container px-0">
+                                            <span className="checkmark fw-bold">
+                                              Payment
+                                            </span>
+                                          </label>
+                                        </div>
+                                      </div>
+
+                                      {/* 2 */}
+                                      <div className="col-2 m-1">
+                                        <div
+                                          style={{
+                                            // fontSize: "12px",
+                                            display: "flex",
+                                            alignItems: "left",
+                                            justifyContent: "left",
+                                            float: "left",
+                                            color: "green",
+                                          }}
+                                        >
+                                          <label className="container px-0">
+                                            <span className="checkmark">{item.status}</span>
+                                          </label>
+                                        </div>
+                                      </div>
+
+                                      <div className="col-3 m-1">
+                                        <div
+                                          style={{
+                                            // fontSize: "12px",
+                                            display: "flex",
+                                            alignItems: "left",
+                                            justifyContent: "left",
+                                            float: "left",
+                                          }}
+                                        >
+                                          <label className="container px-0">
+                                            <span className="checkmark">
+                                              {new Date(item.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                                              {/* {item.createdAt} */}
+                                              {/* Mar 20, 2021 */}
+                                            </span>
+                                          </label>
+                                        </div>
+                                      </div>
+
+                                      {/* 4 */}
+                                      <div className="col-1 m-1">
+                                        <div
+                                          style={{
+                                            // fontSize: "12px",
+                                            display: "flex",
+                                            alignItems: "left",
+                                            justifyContent: "left",
+                                            float: "left",
+                                            // color: "#EB5757",
+                                          }}
+                                        >
+                                          <label className="container px-0">
+                                            <span className="checkmark">
+                                              {/* $140,20 */}
+                                              ${Number(item.amount).toFixed(2)}
+                                            </span>
+                                          </label>
+                                        </div>
+                                      </div>
+
+                                      <div className="col-1 m-1">
+                                        <div
+                                          style={{
+                                            display: "flex",
+                                            alignItems: "left",
+                                            justifyContent: "left",
+                                            float: "left",
+                                          }}
+                                        >
+                                          <label className="container px-0" onClick={() => addPrice(Number(item.amount).toFixed(2))}>
+                                            <span className="checkmark moreImg">
+                                              <img
+                                                src="/images/icon/more.png"
+                                                alt=""
+                                                style={{ width: 22, height: 22 }}
+                                              />
+                                            </span>
+                                          </label>
+                                        </div>
+                                      </div>
+
                                     </div>
+                                    <hr style={{ borderTop: "2px solid black" }} />
                                   </div>
 
-                                  {/* 2 */}
-                                  <div className="col-2 m-1">
-                                    <div
-                                      style={{
-                                        fontSize: "12px",
-                                        display: "flex",
-                                        alignItems: "left",
-                                        justifyContent: "left",
-                                        float: "left",
-                                        color: "green",
-                                      }}
-                                    >
-                                      <label className="container px-0">
-                                        <span className="checkmark">{item.status}</span>
-                                      </label>
-                                    </div>
-                                  </div>
 
-                                  <div className="col-3 m-1">
-                                    <div
-                                      style={{
-                                        fontSize: "12px",
-                                        display: "flex",
-                                        alignItems: "left",
-                                        justifyContent: "left",
-                                        float: "left",
-                                      }}
-                                    >
-                                      <label className="container px-0">
-                                        <span className="checkmark">
-                                          {new Date(item.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
-                                          {/* {item.createdAt} */}
-                                          {/* Mar 20, 2021 */}
-                                        </span>
-                                      </label>
-                                    </div>
-                                  </div>
+                                ))}
 
-                                  {/* 4 */}
-                                  <div className="col-1 m-1">
-                                    <div
-                                      style={{
-                                        fontSize: "12px",
-                                        display: "flex",
-                                        alignItems: "left",
-                                        justifyContent: "left",
-                                        float: "left",
-                                        // color: "#EB5757",
-                                      }}
-                                    >
-                                      <label className="container px-0">
-                                        <span className="checkmark">
-                                          {/* $140,20 */}
-                                          ${item.amount}
-                                        </span>
-                                      </label>
-                                    </div>
-                                  </div>
+                              </div>
 
-
-                                
-                                </div>
-                              ))}
                             </div>
                           </div>
 
-                          
+                          <div className="col-12 col-xs-12 col-md-12 col-lg-5 col-xl-5">
+                            <div className="left_payment">
+                              <h3 className="mt-4"><b>Payment Detail</b></h3>
+
+                              <div
+                                className="img mt-4"
+                                style={{
+                                  borderRadius: 40,
+                                  width: 80,
+                                  height: 80,
+                                  margin: "0 auto"
+                                }}
+                              >
+                                <img
+                                  src={image}
+                                  alt="Logo"
+                                  width="72%"
+                                  height="auto"
+                                  className="d-inline-block align-text-top rounded-circle"
+                                />
+                              </div>
+                              <p><b>{name}</b></p>
+                              <hr className="payhr mb-4" />
+                              <span>Amount Due</span>
+                              <h3 className="amntdueH">${Number(currenPrice).toFixed(2)}</h3>
+                              <hr className="payhr mb-4 mt-4" />
+                              <p className="mb-2">Billing Plan</p>
+                              <h4 className="mb-5">Company Start</h4>
+                            </div>
+                          </div>
+
                         </div>
                       </section>
                     </div>

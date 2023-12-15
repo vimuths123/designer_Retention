@@ -6,6 +6,7 @@ import {
   useElements
 } from "@stripe/react-stripe-js";
 import { checkLogin, getToken } from '../utils/auth';
+import { useRouter } from "next/router";
 
 export default function CheckoutForm() {
   const stripe = useStripe();
@@ -14,6 +15,8 @@ export default function CheckoutForm() {
   const [email, setEmail] = React.useState('');
   const [message, setMessage] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
+
+  const router = useRouter();
 
   const savePayment = async (paymentIntent, token) => {
     const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "payment/save_payment", {
@@ -27,9 +30,14 @@ export default function CheckoutForm() {
       }),
     });
 
+    if(response.ok){
+      router.push('/');
+    }
+
   }
 
   React.useEffect(() => {
+
     if (!stripe) {
       return;
     }
@@ -46,7 +54,7 @@ export default function CheckoutForm() {
       switch (paymentIntent.status) {
         case "succeeded":
           setMessage("Payment succeeded!");
-          savePayment(paymentIntent, getToken())
+          // savePayment(paymentIntent, getToken())
           break;
         case "processing":
           setMessage("Your payment is processing.");
@@ -72,24 +80,34 @@ export default function CheckoutForm() {
 
     setIsLoading(true);
 
-    const { error } = await stripe.confirmPayment({
+    const response = await stripe.confirmPayment({
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: process.env.NEXT_PUBLIC_FRONTEND_URL,
+        // return_url: process.env.NEXT_PUBLIC_FRONTEND_URL,
+        payment_method_data: {
+          billing_details: {
+            address: {
+              country: 'US'
+            }
+          }
+        }
       },
+      redirect: 'if_required'
     });
 
-    // This point will only be reached if there is an immediate error when
-    // confirming the payment. Otherwise, your customer will be redirected to
-    // your `return_url`. For some payment methods like iDEAL, your customer will
-    // be redirected to an intermediate site first to authorize the payment, then
-    // redirected to the `return_url`.
-    if (error.type === "card_error" || error.type === "validation_error") {
-      setMessage(error.message);
-    } else {
-      setMessage("An unexpected error occurred.");
-    }
+    if (!response.error) {
+      console.log(response.paymentIntent);
+      savePayment(response.paymentIntent, getToken());
+
+    } 
+
+   
+    // if (error.type === "card_error" || error.type === "validation_error") {
+    //   setMessage(error.message);
+    // } else {
+    //   setMessage("An unexpected error occurred.");
+    // }
 
     setIsLoading(false);
   };
@@ -99,15 +117,15 @@ export default function CheckoutForm() {
   const paymentElementOptions = {
     layout: "tabs",
     paymentMethodOrder: ['card'],
-    // fields: {
-    //   billingDetails: {
-    //     // name: 'auto',
-    //     // email: 'auto',
-    //     address: {
-    //       country: 'never'
-    //     }
-    //   }
-    // }
+    fields: {
+      billingDetails: {
+        // name: 'auto',
+        // email: 'auto',
+        address: {
+          country: 'never'
+        }
+      }
+    }
   };
 
 
@@ -120,6 +138,12 @@ export default function CheckoutForm() {
         id="link-authentication-element"
         onChange={(e) => setEmail(e.target.value)}
       /> */}
+      <label className="stripe_label">Name</label>
+      <input className="stripe_input" type="text" id="name" placeholder="Enter your name" />
+
+      <label className="stripe_label">Email</label>
+      <input className="stripe_input" type="text" id="email" placeholder="Enter your email" />
+
       <PaymentElement id="payment-element" options={paymentElementOptions} />
       <button className="btn btn-primary mt-2" disabled={isLoading || !stripe || !elements} id="submit">
         <span id="button-text">

@@ -54,6 +54,7 @@ const Index = () => {
     });
     const [newChat, setNewChat] = useState(true);
     const [chatkey, setChatkey] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const filterDates = (chats) => {
         // Get the current date
@@ -225,14 +226,15 @@ const Index = () => {
         setNewChat(false)
         setChatkey(uniqueRandomId)
 
-
+        setLoading(true)
 
         await Promise.all([
             setMessage('User', chatInput, '', uniqueRandomId, true),
             setMessage('Ai', 'Noted on that... Please wait in a bit, Thanks!', '', uniqueRandomId, false),
-            setImageMessage('Ai', 'Thank you for waiting! Kindly see the results below:', true, uniqueRandomId, false),
+            // setImageMessage('Ai', 'Thank you for waiting! Kindly see the results below:', true, uniqueRandomId, false),
         ]);
         getUserChats()
+        setLoading(false)
     }
 
     const getOldChat = async (chatkey) => {
@@ -241,7 +243,7 @@ const Index = () => {
             pathname: '/',
             query: { chatkey: chatkey }
         });
-        
+
 
         const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "chat/get_chat", {
             method: 'POST',
@@ -264,7 +266,7 @@ const Index = () => {
                         const userMessage = <UserInput message={message.content} />
                         setAppendedComponents(prevComponents => [...prevComponents, userMessage]);
                     } else if (message.owner == "Ai") {
-                        const aiMessage = <AiInput message={message.content} image={message.image_url}/>
+                        const aiMessage = <AiInput message={message.content} image={message.image_url} />
                         setAppendedComponents(prevComponents => [...prevComponents, aiMessage]);
                     }
                 })
@@ -361,6 +363,11 @@ const Index = () => {
 
                         <div className="col-md-9 position-relative" style={{ height: "calc(100vh - 100px)", background: "#F8F9FA", overflow: "hidden" }}>
                             <div style={{ height: "calc(100vh - 100px)", overflow: "scroll" }} className='right_alignments'>
+                                {loading && (
+                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+                                        <div className="spinner-border text-primary" role="status"></div>
+                                    </div>
+                                )}
                                 {appendedComponents.map((component, index) => (
                                     <div className='' key={index}>{component}</div>
                                 ))}
