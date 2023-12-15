@@ -1,16 +1,9 @@
-import Loader from "react-loader-spinner";
-// import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import React from 'react'
 
-
-export default function Home() {
-
-
+const test = () => {
   return (
-    <>
-      <div class="d-flex justify-content-center mt-4">
-        <div class="spinner-border" role="status">
-        </div>
-      </div>
-    </>
-  );
+    <div>test</div>
+  )
 }
+
+export default test
